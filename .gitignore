@@ -1,2 +1,4 @@
 bin/
 obj/
+publish.ps1
+run-api.ps1
