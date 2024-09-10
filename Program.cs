@@ -3,22 +3,6 @@ using Serilog;
 
 namespace WebApp
 {
-    public class AngularMiddleware
-    {
-        private readonly RequestDelegate _next;
-
-        public AngularMiddleware(RequestDelegate next)
-        {
-            _next = next;
-        }
-
-        public async Task Invoke(HttpContext context)
-        {
-            Console.WriteLine($"AngularMiddleware Invoke: {context.Request.Path}, IP: {context.Connection.RemoteIpAddress}");
-            await _next(context); // call the next middleware
-        }
-    }
-
     public class CSPMiddleware
     {
         private readonly string _cspPolicy;
@@ -45,13 +29,10 @@ namespace WebApp
 
             WebApplicationBuilder webApplicationBuilder = WebApplication.CreateBuilder(args);
 
-            // Add the Angular app
-            webApplicationBuilder.Services.AddSpaStaticFiles(configuration =>
-            {
-                configuration.RootPath = "app/wwwrooot";
-            });
-
+            // health check
             webApplicationBuilder.Services.AddHealthChecks();
+
+            // Logging support, t
             webApplicationBuilder.Services.AddLogging();
 
             // CORS support
@@ -74,6 +55,12 @@ namespace WebApp
                                   });
             });
 
+            // allows serving our SPA app
+            webApplicationBuilder.Services.AddSpaStaticFiles(configuration =>
+            {
+                configuration.RootPath = "app/wwwrooot";
+            });         
+
             // Logging support
             webApplicationBuilder.Logging.ClearProviders();
             webApplicationBuilder.Logging.AddConsole();
@@ -90,7 +77,8 @@ namespace WebApp
 
             // Used to serve the Angular app
             logger.LogInformation("Setting up Angular Middleware");
-            //app.UseMiddleware<AngularMiddleware>();
+
+            //redirect to index.html if the request is not an API request
             app.Use(async (context, next) =>
             {
                 await next();
@@ -119,10 +107,8 @@ namespace WebApp
             logger.LogInformation("Setting up CORS for LOCAL: " + api);
             app.UseCors(local);
 
-            logger.LogInformation("Setting up UseStaticFiles");
-            app.UseStaticFiles(); // This is used to serve static files, e.g. the Angular app
-
             logger.LogInformation("Setting up UseHttpsRedirection");
+            app.UseStaticFiles(); // this is also required to actually serve the static files of the Angular app
             app.UseHttpsRedirection(); // redirect to https
             app.UseExceptionHandler("/Error"); // handle exceptions
             app.UseHealthChecks("/health"); // setup health checks using the default health check middleware
