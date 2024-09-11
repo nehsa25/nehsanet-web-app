@@ -88,18 +88,19 @@ namespace WebApp
                 await next();
                 if (context.Response.StatusCode == 404 && !Path.HasExtension(context.Request.Path.Value))
                 {  
+                    logger.LogInformation($"Directing request {context.Request.Path.Value} to index.html");
                     context.Response.StatusCode = StatusCodes.Status302Found;
                     context.Request.Path = "/index.html";
                     await next();
                 }
             });
 
-            // ensure we redirect to index.html any non API requests
-            logger.LogInformation("Setting up Default Files");
-            app.UseDefaultFiles(new DefaultFilesOptions
-            {
-                DefaultFileNames = ["index.html"]
-            });
+            // // ensure we redirect to index.html any non API requests
+            // logger.LogInformation("Setting up Default Files");
+            // app.UseDefaultFiles(new DefaultFilesOptions
+            // {
+            //     DefaultFileNames = ["index.html"]
+            // });
 
             // set to use CORS
             logger.LogInformation("Setting up CORS for API: " + api);
