@@ -29,6 +29,12 @@ namespace WebApp
 
             WebApplicationBuilder webApplicationBuilder = WebApplication.CreateBuilder(args);
 
+            // disable idle timeout
+            webApplicationBuilder.WebHost.ConfigureKestrel(options =>
+            {
+                options.Limits.KeepAliveTimeout = TimeSpan.FromMinutes(0);
+            });
+
             // health check
             webApplicationBuilder.Services.AddHealthChecks();
 
@@ -77,8 +83,6 @@ namespace WebApp
 
             // Used to serve the Angular app
             logger.LogInformation("Setting up Angular Middleware");
-
-            //redirect to index.html if the request is not an API request
             app.Use(async (context, next) =>
             {
                 await next();
