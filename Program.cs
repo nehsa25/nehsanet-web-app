@@ -29,10 +29,10 @@ namespace WebApp
 
             WebApplicationBuilder webApplicationBuilder = WebApplication.CreateBuilder(args);
 
-            // disable idle timeout
+            // increase idle timeout
             webApplicationBuilder.WebHost.ConfigureKestrel(options =>
             {
-                options.Limits.KeepAliveTimeout = TimeSpan.FromMinutes(0);
+                options.Limits.KeepAliveTimeout = TimeSpan.FromMinutes(5);
             });
 
             // health check
