@@ -8,7 +8,7 @@ WORKDIR /app
 COPY ./www.nehsa.net.pfx ./www.nehsa.net.pfx
 
 # copy the application to the container
-COPY nehsanet/dist/nehsanet/browser/ /app/wwwroot
+# COPY wwwroot /app/wwwroot
 
 # Copy the project file and restore any dependencies (use .csproj for the project name)
 COPY *.csproj ./

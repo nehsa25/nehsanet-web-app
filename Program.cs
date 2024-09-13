@@ -95,13 +95,6 @@ namespace WebApp
                 }
             });
 
-            // // ensure we redirect to index.html any non API requests
-            // logger.LogInformation("Setting up Default Files");
-            // app.UseDefaultFiles(new DefaultFilesOptions
-            // {
-            //     DefaultFileNames = ["index.html"]
-            // });
-
             // set to use CORS
             logger.LogInformation("Setting up CORS for API: " + api);
             app.UseCors(api);
