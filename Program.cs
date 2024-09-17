@@ -95,6 +95,9 @@ namespace WebApp
                 }
             });
 
+            // redirect to https
+            app.UseHttpsRedirection(); 
+
             // set to use CORS
             logger.LogInformation("Setting up CORS for API: " + api);
             app.UseCors(api);
@@ -107,7 +110,7 @@ namespace WebApp
 
             logger.LogInformation("Setting up UseHttpsRedirection");
             app.UseStaticFiles(); // this is also required to actually serve the static files of the Angular app
-            app.UseHttpsRedirection(); // redirect to https
+
             app.UseExceptionHandler("/Error"); // handle exceptions
             app.UseHealthChecks("/health"); // setup health checks using the default health check middleware
             app.UseRouting(); // This configues the routing middleware
