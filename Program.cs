@@ -96,7 +96,7 @@ namespace WebApp
             });
 
             // redirect to https
-            app.UseHttpsRedirection(); 
+            //app.UseHttpsRedirection(); 
 
             // set to use CORS
             logger.LogInformation("Setting up CORS for API: " + api);
