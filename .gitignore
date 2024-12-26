@@ -1,7 +1,6 @@
 bin/
 obj/
 out/
-publish.ps1
 run-api.ps1
 www.nehsa.net.pfx
 appsettings.Development.json
