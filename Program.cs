@@ -89,14 +89,11 @@ namespace WebApp
                 if (context.Response.StatusCode == 404 && !Path.HasExtension(context.Request.Path.Value))
                 {  
                     logger.LogInformation($"Directing request {context.Request.Path.Value} to index.html");
-                    context.Response.StatusCode = StatusCodes.Status302Found;
+                    context.Response.StatusCode = StatusCodes.Status200OK;
                     context.Request.Path = "/index.html";
                     await next();
                 }
             });
-
-            // redirect to https
-            //app.UseHttpsRedirection(); 
 
             // set to use CORS
             logger.LogInformation("Setting up CORS for API: " + api);
@@ -109,7 +106,10 @@ namespace WebApp
             app.UseCors(local);
 
             logger.LogInformation("Setting up UseHttpsRedirection");
-            app.UseStaticFiles(); // this is also required to actually serve the static files of the Angular app
+            app.UseHttpsRedirection(); 
+
+            // this is also required to actually serve the static files of the Angular app
+            app.UseStaticFiles(); 
 
             app.UseExceptionHandler("/Error"); // handle exceptions
             app.UseHealthChecks("/health"); // setup health checks using the default health check middleware
